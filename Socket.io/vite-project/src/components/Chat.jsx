@@ -10,55 +10,64 @@ socket.on("connect", () => {
 });
 
 export function Chat() {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState({ sender: "", content: "" });
   const [messages, setMessages] = useState([]);
 
   function setNewMessage(message) {
     setMessages([
       ...messages,
       {
-        id: myId,
         message,
       },
     ]);
   }
 
   useEffect(() => {
+    console.log(messages);
     socket.on("message", setNewMessage);
-
     return () => socket.off("message", setNewMessage);
   }, [messages]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (message.trim() === "") return;
-
     socket.emit("message", message);
-    setMessage("");
+    setMessage({ sender: message.sender, content: "" });
   };
 
-  const handleInputChange = (event) => {
-    setMessage(event.target.value);
+  const handleSenderChange = (event) => {
+    setMessage({ sender: event.target.value, content: message.content });
+  };
+
+  const handleContentChange = (event) => {
+    setMessage({ content: event.target.value, sender: message.sender });
   };
 
   return (
     <main>
-      <ul>
-        {messages.map((m, index) => (
-          <li
-            className={`message(${m.id === myId ? "mine" : "other"})`}
-            key={index}
-          >
-            <span>{m.message}</span>
-          </li>
-        ))}
-      </ul>
+      {messages.map(({ message }, index) => (
+        <div key={index}>
+          <span>
+            {message.sender}:<br />
+            {message.content}
+          </span>
+        </div>
+      ))}
       <form onSubmit={handleSubmit}>
+        <label>Sender:</label>
         <input
           type="text"
-          name="message"
-          value={message}
-          onChange={handleInputChange}
+          name="sender"
+          value={message.sender}
+          onChange={handleSenderChange}
+          placeholder="Digite seu nome"
+        />
+        <br />
+        <label>Message:</label>
+        <input
+          type="text"
+          name="content"
+          value={message.content}
+          onChange={handleContentChange}
           placeholder="Digite uma mensagem..."
         />
         <button type="submit">Enviar</button>
