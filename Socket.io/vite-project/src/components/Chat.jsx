@@ -10,9 +10,11 @@ socket.on("connect", () => {
 });
 
 export function Chat() {
+  //? states
   const [message, setMessage] = useState({ sender: "", content: "" });
   const [messages, setMessages] = useState([]);
 
+  //? effects
   function setNewMessage(message) {
     setMessages([
       ...messages,
@@ -23,14 +25,14 @@ export function Chat() {
   }
 
   useEffect(() => {
-    console.log(messages);
     socket.on("message", setNewMessage);
     return () => socket.off("message", setNewMessage);
   }, [messages]);
 
+  //? handlers form functions
   const handleSubmit = (e) => {
     e.preventDefault();
-    socket.emit("message", message);
+    socket.emit("message", { message, messages });
     setMessage({ sender: message.sender, content: "" });
   };
 
@@ -42,6 +44,7 @@ export function Chat() {
     setMessage({ content: event.target.value, sender: message.sender });
   };
 
+  //? render
   return (
     <main>
       {messages.map(({ message }, index) => (

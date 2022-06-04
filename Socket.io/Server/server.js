@@ -13,9 +13,8 @@ const io = SocketIO(server, {
 io.on("connection", (socket) => {
     console.log("New client connected");
 
-    socket.on("message", (message) => {
+    socket.on("message", ({ message, messages }) => {
         io.emit("message", message);
-        console.log(message);
     });
 
     socket.on("disconnect", () => {
