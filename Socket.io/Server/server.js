@@ -11,7 +11,11 @@ const io = SocketIO(server, {
 });
 
 io.on("connection", (socket) => {
-    console.log("New client connected");
+    console.log("New client connected" + socket.id);
+
+    socket.on("clientId", () => {
+        socket.emit("myId", socket.id);
+    });
 
     socket.on("message", ({ message, messages }) => {
         io.emit("message", message);
