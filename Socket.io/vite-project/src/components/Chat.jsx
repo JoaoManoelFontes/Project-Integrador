@@ -17,6 +17,7 @@ export function Chat() {
   //? states
   const [message, setMessage] = useState({ sender: "", content: "", id: "" });
   const [messages, setMessages] = useState([]);
+  const [room, setRoom] = useState("");
 
   //? effects
   function setNewMessage(message) {
@@ -29,14 +30,14 @@ export function Chat() {
   }
 
   useEffect(() => {
-    socket.on("message", setNewMessage);
-    return () => socket.off("message", setNewMessage);
+    socket.on("receiveMessage", setNewMessage);
+    return () => socket.off("receiveMessage", setNewMessage);
   }, [messages]);
 
   //? handlers form functions
   const handleSubmit = (e) => {
     e.preventDefault();
-    socket.emit("message", { message, messages });
+    socket.emit("sendMessage", { message, room });
     setMessage({ sender: message.sender, content: "", id: myId });
   };
 
@@ -46,6 +47,10 @@ export function Chat() {
       content: message.content,
       id: myId,
     });
+  };
+
+  const handleRoomChange = (event) => {
+    setRoom(event.target.value);
   };
 
   const handleContentChange = (event) => {
@@ -59,7 +64,25 @@ export function Chat() {
   //? render
   return (
     <main>
+      <label>Join Room:</label>
+      <input
+        type="text"
+        name="room"
+        value={message.room}
+        onChange={handleRoomChange}
+        placeholder="Digite o nome da sala"
+      />
+      <button
+        onClick={() => {
+          room != ""
+            ? socket.emit("joinRoom", room)
+            : alert("Selecione uma sala!");
+        }}
+      >
+        Join
+      </button>
       <form onSubmit={handleSubmit}>
+        <br />
         <label>Sender:</label>
         <input
           type="text"

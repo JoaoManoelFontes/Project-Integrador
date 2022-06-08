@@ -11,14 +11,20 @@ const io = SocketIO(server, {
 });
 
 io.on("connection", (socket) => {
-    console.log("New client connected" + socket.id);
+    console.log("New client connected: " + socket.id);
 
     socket.on("clientId", () => {
         socket.emit("myId", socket.id);
     });
 
-    socket.on("message", ({ message, messages }) => {
-        io.emit("message", message);
+    socket.on("sendMessage", ({ message, room }) => {
+        console.log(message);
+        io.to(room).emit("receiveMessage", message);
+    });
+
+    socket.on("joinRoom", (roomId) => {
+        socket.join(roomId);
+        console.log("User joined room: " + roomId);
     });
 
     socket.on("disconnect", () => {
