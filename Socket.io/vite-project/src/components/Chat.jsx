@@ -17,6 +17,8 @@ export function Chat() {
   //? states
   const [message, setMessage] = useState({ sender: "", content: "", id: "" });
   const [messages, setMessages] = useState([]);
+  const [joinedRoom, setJoinedRoom] = useState("");
+  const [clients, setClients] = useState(0);
   const [room, setRoom] = useState("");
 
   //? effects
@@ -34,6 +36,13 @@ export function Chat() {
     return () => socket.off("receiveMessage", setNewMessage);
   }, [messages]);
 
+  useEffect(() => {
+    socket.on("roomJoined", (data) => {
+      setClients(data);
+    });
+    console.log(clients);
+    return () => socket.off("roomJoined", (data) => setClients(data));
+  }, [clients]);
   //? handlers form functions
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -74,9 +83,8 @@ export function Chat() {
       />
       <button
         onClick={() => {
-          room != ""
-            ? socket.emit("joinRoom", room)
-            : alert("Selecione uma sala!");
+          socket.emit("joinRoom", room);
+          setJoinedRoom(room);
         }}
       >
         Join
@@ -100,8 +108,14 @@ export function Chat() {
           onChange={handleContentChange}
           placeholder="Digite uma mensagem..."
         />
-        <button type="submit">Enviar</button>
+        <button type="submit">Send</button>
       </form>
+      {joinedRoom && (
+        <div>
+          <h3>Entrou na sala: {joinedRoom}</h3>
+          <p>{clients} usuário(s) esta(ão) nessa sala</p>
+        </div>
+      )}
       <h2>Messages:</h2>
       {messages.map((message, index) =>
         message.message.id === myId ? (

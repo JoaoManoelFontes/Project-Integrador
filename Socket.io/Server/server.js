@@ -9,7 +9,7 @@ const io = SocketIO(server, {
         methods: ["GET", "POST"],
     },
 });
-
+const clients = {};
 io.on("connection", (socket) => {
     console.log("New client connected: " + socket.id);
 
@@ -23,11 +23,19 @@ io.on("connection", (socket) => {
     });
 
     socket.on("joinRoom", (roomId) => {
+        if (clients[roomId] == undefined) {
+            clients[roomId] = 1;
+        } else {
+            clients[roomId]++;
+        }
         socket.join(roomId);
+        socket.room = roomId;
         console.log("User joined room: " + roomId);
+        socket.emit("roomJoined", clients[roomId]);
     });
 
     socket.on("disconnect", () => {
+        clients[socket.room]--;
         console.log("Client disconnected");
     });
 });
