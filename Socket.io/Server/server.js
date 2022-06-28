@@ -12,10 +12,7 @@ const io = SocketIO(server, {
 const clients = {};
 io.on("connection", (socket) => {
     console.log("New client connected: " + socket.id);
-
-    socket.on("clientId", () => {
-        socket.emit("myId", socket.id);
-    });
+    socket.emit("myId", socket.id);
 
     socket.on("sendMessage", ({ message, room }) => {
         console.log(message);
@@ -31,7 +28,7 @@ io.on("connection", (socket) => {
         socket.join(roomId);
         socket.room = roomId;
         console.log("User joined room: " + roomId);
-        socket.emit("roomJoined", clients[roomId]);
+        io.to(roomId).emit("roomJoined", clients[roomId]);
     });
 
     socket.on("disconnect", () => {

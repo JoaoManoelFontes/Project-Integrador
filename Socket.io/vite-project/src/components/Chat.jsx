@@ -15,7 +15,7 @@ socket.on("connect", () => {
 
 export function Chat() {
   //? states
-  const [message, setMessage] = useState({ sender: "", content: "", id: "" });
+  const [message, setMessage] = useState({});
   const [messages, setMessages] = useState([]);
   const [joinedRoom, setJoinedRoom] = useState("");
   const [clients, setClients] = useState(0);
@@ -40,7 +40,6 @@ export function Chat() {
     socket.on("roomJoined", (data) => {
       setClients(data);
     });
-    console.log(clients);
     return () => socket.off("roomJoined", (data) => setClients(data));
   }, [clients]);
   //? handlers form functions
