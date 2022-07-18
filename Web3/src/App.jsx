@@ -12,6 +12,7 @@ function App() {
 
   //conectar com a carteira pelo Metamask
   async function connect() {
+    console.log("sla");
     //? Pop-Up do MetaMask para conectar
     await window.ethereum.request({ method: "eth_requestAccounts" });
 
