@@ -9,29 +9,65 @@ const io = SocketIO(server, {
         methods: ["GET", "POST"],
     },
 });
+
 const clients = {};
+let rooms = [];
 io.on("connection", (socket) => {
     console.log("New client connected: " + socket.id);
-    socket.emit("myId", socket.id);
+    io.emit("newRoom", rooms);
 
-    socket.on("sendMessage", ({ message, room }) => {
-        console.log(message);
-        io.to(room).emit("receiveMessage", message);
+    socket.on("generateRoom", () => {
+        socket.join(socket.id);
+        socket.room = socket.id;
+        clients[socket.id] = 1;
+        socket.emit("roomGenerated", {
+            room: socket.id,
+            status: "waiting for player 2",
+        });
+        rooms.push(socket.id);
+        console.log("-----Clients:" + clients);
+        console.log("-----rooms:" + rooms);
     });
 
-    socket.on("joinRoom", (roomId) => {
-        if (clients[roomId] == undefined) {
-            clients[roomId] = 1;
+    socket.on("joinRoom", (room) => {
+        if (clients[room] == 1) {
+            clients[room]++;
+            socket.room = room;
+            socket.join(room);
+            socket.emit("roomJoined", {
+                room: room,
+                status: "player 2 joined, waiting to start the game",
+            });
+            io.to(room).emit("status", "player 2 joined, waiting to start the game");
+            console.log("[joinRoom] player 2 has joined");
+        } else if (clients[room] == undefined) {
+            clients[room] = 1;
+            socket.room = room;
+            socket.join(room);
+            socket.emit("roomJoined", {
+                room: socket.id,
+                status: "waiting for player 2",
+            });
+            console.log("[joinRoom] player 1 has joined");
         } else {
-            clients[roomId]++;
+            socket.emit(
+                "joinRoomError",
+                "This room has already full! Generate a room to continue"
+            );
+            console.log("[joinRoom] room error");
         }
-        socket.join(roomId);
-        socket.room = roomId;
-        console.log("User joined room: " + roomId);
-        io.to(roomId).emit("roomJoined", clients[roomId]);
     });
 
     socket.on("disconnect", () => {
+        rooms = rooms.filter((room) => {
+            if (room == socket.id) {
+                io.to(room).emit(
+                    "status",
+                    "Host leaves the room! back to the homepage"
+                );
+            }
+            return room != socket.id;
+        });
         clients[socket.room]--;
         console.log("Client disconnected");
     });
