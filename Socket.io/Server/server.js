@@ -5,7 +5,7 @@ const SocketIO = require("socket.io");
 const server = http.createServer(app, {});
 const io = SocketIO(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "http://localhost:3001",
         methods: ["GET", "POST"],
     },
 });
@@ -39,7 +39,6 @@ io.on("connection", (socket) => {
                 status: "player 2 joined, waiting to start the game",
             });
             io.to(room).emit("status", "player 2 joined, waiting to start the game");
-            console.log("[joinRoom] player 2 has joined");
         } else if (clients[room] == undefined) {
             clients[room] = 1;
             socket.room = room;
@@ -48,13 +47,11 @@ io.on("connection", (socket) => {
                 room: socket.id,
                 status: "waiting for player 2",
             });
-            console.log("[joinRoom] player 1 has joined");
         } else {
             socket.emit(
                 "joinRoomError",
                 "This room has already full! Generate a room to continue"
             );
-            console.log("[joinRoom] room error");
         }
     });
 
@@ -62,7 +59,7 @@ io.on("connection", (socket) => {
         rooms = rooms.filter((room) => {
             if (room == socket.id) {
                 io.to(room).emit(
-                    "status",
+                    "roomError",
                     "Host leaves the room! back to the homepage"
                 );
             }
