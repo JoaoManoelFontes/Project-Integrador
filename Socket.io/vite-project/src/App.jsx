@@ -64,7 +64,7 @@ export default function App() {
             },
           })
         ) : (
-          <h2>Sala não criada</h2>
+          <p></p>
         )}
       </div>
       <div>
