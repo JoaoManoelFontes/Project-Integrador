@@ -15,12 +15,32 @@ let rooms = [];
 let players = [];
 let players_in_a_room = [];
 
-function winer(playerCards) {
+const cards = [{
+        name: "BoyCard",
+        src: "../static/boyCard.jpeg",
+        strong: 79,
+        speed: 90,
+        agility: 91,
+        smartness: 70,
+    },
+    {
+        name: "GirlCard",
+        src: "../static/girlCard.jpeg",
+        strong: 82,
+        speed: 80,
+        agility: 91,
+        smartness: 90,
+    },
+];
+
+function winner(playerCards) {
     console.log(playerCards);
-    if (playerCards[0] > playerCards[1]) {
-        return playerCards[0] + "ganhou!";
-    } else if (playerCards[0] < playerCards[1]) {
-        return playerCards[1] + "ganhou!";
+    const card1 = cards[playerCards[0].card];
+    const card2 = cards[playerCards[1].card];
+    if (playerCards[0].power > playerCards[1].power) {
+        return card1.name + " ganhou!";
+    } else if (playerCards[0].power < playerCards[1].power) {
+        return card2.name + " ganhou!";
     } else {
         return "Empate!";
     }
@@ -78,7 +98,7 @@ io.on("connection", (socket) => {
             players_in_a_room.push(playerCard);
             players[room] = players_in_a_room;
             io.to(room).emit("status", "Player 2 has already choices his card");
-            console.log(winer(players[room]));
+            io.to(room).emit("winner", winner(players[room]));
             players_in_a_room = [];
         } else if (players[room].length >= 2) {
             socket.emit("status", "You only can pick a card 1 time ");

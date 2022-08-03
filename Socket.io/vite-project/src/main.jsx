@@ -5,12 +5,14 @@ import App from "./App";
 import "./index.css";
 
 import Game from "./components/Game";
+import Winner from "./components/Winner";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}></Route>
       <Route path="/game" element={<Game />}></Route>
+      <Route path="/game-result" element={<Winner />}></Route>
     </Routes>
   </BrowserRouter>
 );
