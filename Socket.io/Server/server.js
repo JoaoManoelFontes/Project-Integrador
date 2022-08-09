@@ -34,13 +34,22 @@ const cards = [{
 ];
 
 function winner(playerCards) {
-    console.log(playerCards);
-    const card1 = cards[playerCards[0].card];
-    const card2 = cards[playerCards[1].card];
-    if (playerCards[0].power > playerCards[1].power) {
-        return card1.name + " ganhou!";
-    } else if (playerCards[0].power < playerCards[1].power) {
-        return card2.name + " ganhou!";
+    const card1 = cards[playerCards[0].playerCard.card];
+    const card2 = cards[playerCards[1].playerCard.card];
+    if (playerCards[0].playerCard.power > playerCards[1].playerCard.power) {
+        return {
+            winner: playerCards[0].id,
+            cardId: playerCards[0].playerCard.card,
+            status: playerCards[0].id + " ganhou com a cartinha " + card1.name + "!",
+        };
+    } else if (
+        playerCards[0].playerCard.power < playerCards[1].playerCard.power
+    ) {
+        return {
+            winner: playerCards[1].id,
+            cardId: playerCards[1].playerCard.card,
+            status: playerCards[1].id + " ganhou com a cartinha " + card2.name + "!",
+        };
     } else {
         return "Empate!";
     }
@@ -49,6 +58,7 @@ function winner(playerCards) {
 io.on("connection", (socket) => {
     console.log("New client connected: " + socket.id);
     io.emit("newRoom", rooms);
+    socket.emit("myId", socket.id);
 
     socket.on("generateRoom", () => {
         socket.join(socket.id);
@@ -59,8 +69,6 @@ io.on("connection", (socket) => {
             status: "waiting for player 2",
         });
         rooms.push(socket.id);
-        console.log("-----Clients:" + clients);
-        console.log("-----rooms:" + rooms);
     });
 
     socket.on("joinRoom", (room) => {
@@ -73,6 +81,8 @@ io.on("connection", (socket) => {
                 status: "player 2 joined, waiting to start the game",
             });
             io.to(room).emit("status", "player 2 joined, waiting to start the game");
+            io.to(room).emit("playerId", socket.id);
+            socket.emit("otherPlayerId", room);
         } else if (clients[room] == undefined) {
             clients[room] = 1;
             socket.room = room;
@@ -89,16 +99,21 @@ io.on("connection", (socket) => {
         }
     });
 
-    socket.on("sendCard", ({ playerCard, room }) => {
+    socket.on("sendCard", ({ playerCard, room, id }) => {
         if (players[room] == undefined) {
-            players_in_a_room.push(playerCard);
+            players_in_a_room.push({ playerCard, id });
             players[room] = players_in_a_room;
-            io.to(room).emit("status", "Player 1 has already choices his card");
+            io.to(room).emit("status", socket.id + " has already choices his card");
         } else if (players[room].length == 1) {
-            players_in_a_room.push(playerCard);
+            players_in_a_room.push({ playerCard, id });
             players[room] = players_in_a_room;
-            io.to(room).emit("status", "Player 2 has already choices his card");
-            io.to(room).emit("winner", winner(players[room]));
+            io.to(room).emit("status", "Players has already choices his card");
+            const result = winner(players[room]);
+            io.to(room).emit("status", result.status);
+            io.to(room).emit("winner", {
+                winner: result.winner,
+                cardId: result.cardId,
+            });
             players_in_a_room = [];
         } else if (players[room].length >= 2) {
             socket.emit("status", "You only can pick a card 1 time ");

@@ -10,6 +10,7 @@ export default function App() {
   const [status, SetStatus] = useState(null);
   const [roomId, setRoomId] = useState("");
   const [roomError, setRoomError] = useState(null);
+  const [socketId, setSocketId] = useState(null);
   const [rooms, setRooms] = useState([]);
 
   //? effects
@@ -25,7 +26,7 @@ export default function App() {
     });
 
     socket.on("newRoom", (data) => setRooms(data));
-
+    socket.on("myId", (data) => setSocketId(data));
     //? socket room errors
     socket.on("joinRoomError", (data) => setRoomError(data));
     socket.on("hostLeavesRoomError", (data) => setRoomError(data));
@@ -56,11 +57,12 @@ export default function App() {
       <button onClick={joinRoom}>Entrar em uma sala existente</button>
       {roomError && <h2>{roomError}</h2>}
       <div>
-        {room != null && status != null ? (
+        {room != null && status != null && socketId != null ? (
           navigate("/game", {
             state: {
               room,
               status,
+              socketId,
             },
           })
         ) : (

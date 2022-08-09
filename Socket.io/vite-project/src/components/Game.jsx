@@ -22,9 +22,12 @@ const Card_container = styled.div`
   flex-flow: row wrap;
   justify-content: space-around;
   align-content: space-around;
-  margin-top: 10%;
+  margin-top: 3%;
 `;
-const test = "manu";
+
+const Status_container = styled.div`
+  margin-left: 2%;
+`;
 
 export default function Game() {
   //? States & Hooks
@@ -35,6 +38,7 @@ export default function Game() {
   const [roomError, setRoomError] = useState(null);
   const [playerCard, setPlayerCard] = useState(null);
   const [winner, setWinner] = useState(null);
+  const [playerId, setPlayerId] = useState(null);
 
   const [cards, setCards] = useState([
     {
@@ -58,12 +62,18 @@ export default function Game() {
   //?Effects
   useEffect(() => {
     setStatus(state.status);
+
+    if (state.room != state.socketId) {
+      setPlayerId(state.room);
+    }
   }, []);
 
   useEffect(() => {
     socket.on("status", (data) => setStatus(data));
 
     socket.on("winner", (data) => setWinner(data));
+
+    socket.on("playerId", (data) => setPlayerId(data));
 
     socket.on("roomError", (data) => setRoomError(data));
   }, [socket]);
@@ -74,13 +84,23 @@ export default function Game() {
   };
 
   const handleFormSend = () => {
-    socket.emit("sendCard", { playerCard, room: state.room });
+    socket.emit("sendCard", {
+      playerCard,
+      room: state.room,
+      id: state.socketId,
+    });
   };
 
   //? Render
   return (
     <div>
       <h1>Game</h1>
+      <div>
+        <p>
+          {state.socketId} (you) - vs -
+          {playerId == null ? " waiting for player" : " " + playerId}
+        </p>
+      </div>
       <Card_container>
         {cards.map((card, index) => {
           return (
@@ -136,21 +156,26 @@ export default function Game() {
             </div>
           );
         })}
+        <Status_container>
+          <h2>Status:</h2>
+          {status && <p>{status}</p>}
+          {roomError && (
+            <div>
+              <p>{roomError}</p>
+              <a href="/">
+                <button>Back</button>
+              </a>
+            </div>
+          )}
+        </Status_container>
       </Card_container>
       {playerCard && <button onClick={handleFormSend}>Click</button>}
-      {status && <p>{status}</p>}
-      {roomError && (
-        <div>
-          <p>{roomError}</p>
-          <a href="/">
-            <button>Back</button>
-          </a>
-        </div>
-      )}
       {winner != null ? (
         navigate("/game-result", {
           state: {
             winner,
+            socketId: state.socketId,
+            status,
           },
         })
       ) : (
