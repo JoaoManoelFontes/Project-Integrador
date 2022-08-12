@@ -62,7 +62,7 @@ export default function Game() {
   //?Effects
   useEffect(() => {
     setStatus(state.status);
-
+    console.log(state);
     if (state.room != state.socketId) {
       setPlayerId(state.room);
     }

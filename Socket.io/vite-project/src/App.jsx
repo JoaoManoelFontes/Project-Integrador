@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import socket from "./client";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function App() {
   //? states & hooks
   const navigate = useNavigate();
+  const { state } = useLocation();
   const [room, setRoom] = useState(null);
   const [status, SetStatus] = useState(null);
   const [roomId, setRoomId] = useState("");
@@ -32,6 +33,10 @@ export default function App() {
     socket.on("hostLeavesRoomError", (data) => setRoomError(data));
   }, [socket]);
 
+  useEffect(() => {
+    setSocketId(state.socketId);
+  }, []);
+
   //?handleFunctions
   const generateRoom = () => {
     socket.emit("generateRoom");
@@ -57,7 +62,7 @@ export default function App() {
       <button onClick={joinRoom}>Entrar em uma sala existente</button>
       {roomError && <h2>{roomError}</h2>}
       <div>
-        {room != null && status != null && socketId != null ? (
+        {room != null && status != null ? (
           navigate("/game", {
             state: {
               room,

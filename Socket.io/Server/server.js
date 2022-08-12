@@ -61,6 +61,7 @@ io.on("connection", (socket) => {
     socket.emit("myId", socket.id);
 
     socket.on("generateRoom", () => {
+        console.log("generate");
         socket.join(socket.id);
         socket.room = socket.id;
         clients[socket.id] = 1;
@@ -82,7 +83,6 @@ io.on("connection", (socket) => {
             });
             io.to(room).emit("status", "player 2 joined, waiting to start the game");
             io.to(room).emit("playerId", socket.id);
-            socket.emit("otherPlayerId", room);
         } else if (clients[room] == undefined) {
             clients[room] = 1;
             socket.room = room;
@@ -91,6 +91,7 @@ io.on("connection", (socket) => {
                 room: socket.id,
                 status: "waiting for player 2",
             });
+            rooms.push(socket.id);
         } else {
             socket.emit(
                 "joinRoomError",
