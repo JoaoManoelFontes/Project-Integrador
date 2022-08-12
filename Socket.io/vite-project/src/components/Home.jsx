@@ -45,15 +45,19 @@ export default function Home() {
   const [status, SetStatus] = React.useState(null);
   const [roomId, setRoomId] = React.useState("");
   const [roomError, setRoomError] = React.useState(null);
+  const [rooms, setRooms] = React.useState([]);
 
   const navigate = useNavigate();
 
   //?Effects
   React.useEffect(() => {
+    console.log(rooms.length);
     socket.on("roomGenerated", (data) => {
       setRoom(data.room);
       SetStatus(data.status);
     });
+
+    socket.on("newRoom", (data) => setRooms(data));
 
     socket.on("roomJoined", (data) => {
       setRoom(data.room);
@@ -159,6 +163,25 @@ export default function Home() {
               >
                 <Alert severity="error">{roomError}</Alert>
               </Stack>
+            )}
+            {rooms.length > 0 ? (
+              rooms.map((room, index) => {
+                return (
+                  <div key={index}>
+                    <h3>Sala {index + 1}</h3>
+                    <p>id: {room}</p>
+                    <button
+                      onClick={() => {
+                        socket.emit("joinRoom", room);
+                      }}
+                    >
+                      Entrar na sala
+                    </button>
+                  </div>
+                );
+              })
+            ) : (
+              <></>
             )}
           </Container>
         </Box>

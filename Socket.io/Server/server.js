@@ -57,7 +57,7 @@ function winner(playerCards) {
 
 io.on("connection", (socket) => {
     console.log("New client connected: " + socket.id);
-    io.emit("newRoom", rooms);
+    socket.emit("newRoom", rooms);
     socket.emit("myId", socket.id);
 
     socket.on("generateRoom", () => {
