@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import socket from "../client";
+import socket from "../assets/client";
 import styled from "styled-components";
 
 import Card from "@mui/material/Card";
@@ -13,8 +13,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 
-import GirlCardImg from "../static/girlCard.jpeg";
-import BoyCardImg from "../static/boyCard.jpeg";
+import api from "../assets/api";
 
 const Card_container = styled.div`
   display: flex;
@@ -40,29 +39,24 @@ export default function Game() {
   const [winner, setWinner] = useState(null);
   const [playerId, setPlayerId] = useState(null);
 
-  const [cards, setCards] = useState([
-    {
-      name: "BoyCard",
-      src: BoyCardImg,
-      strong: 79,
-      speed: 90,
-      agility: 91,
-      smartness: 70,
-    },
-    {
-      name: "GirlCard",
-      src: GirlCardImg,
-      strong: 82,
-      speed: 80,
-      agility: 91,
-      smartness: 90,
-    },
-  ]);
+  const [cards, setCards] = useState();
 
   //?Effects
   useEffect(() => {
+    //Getting cards from api
+    api
+      .get()
+      .then(({ data }) => {
+        setCards(data.cards);
+        cards.map((card) => {
+          card.src = require(card.src);
+        });
+      })
+      .catch((err) => {
+        console.log(err.response.body);
+      });
+
     setStatus(state.status);
-    console.log(state);
     if (state.room != state.socketId) {
       setPlayerId(state.room);
     }
@@ -102,60 +96,61 @@ export default function Game() {
         </p>
       </div>
       <Card_container>
-        {cards.map((card, index) => {
-          return (
-            <div key={index}>
-              <Card
-                style={{ marginTop: "5%", backgroundColor: "#ccdff2" }}
-                sx={{ maxWidth: 200 }}
-              >
-                <CardMedia
-                  component="img"
-                  height="250"
-                  image={card.src}
-                  alt={card.name}
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {card.name}
-                  </Typography>
-                  <FormControl>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="row-radio-buttons-group"
-                    >
-                      <FormControlLabel
-                        value={`{"card": ${index}, "power":${card.strong}}`}
-                        control={<Radio />}
-                        label={`Strong :${card.strong}`}
-                        onChange={handleChange}
-                      />
-                      <FormControlLabel
-                        value={`{"card": ${index}, "power":${card.speed}}`}
-                        control={<Radio />}
-                        label={`Speed :${card.speed}`}
-                        onChange={handleChange}
-                      />
-                      <FormControlLabel
-                        value={`{"card": ${index}, "power":${card.agility}}`}
-                        control={<Radio />}
-                        label={`Agility :${card.agility}`}
-                        onChange={handleChange}
-                      />
-                      <FormControlLabel
-                        value={`{"card": ${index}, "power":${card.smartness}}`}
-                        control={<Radio />}
-                        label={`Smartness :${card.smartness}`}
-                        onChange={handleChange}
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </CardContent>
-              </Card>
-            </div>
-          );
-        })}
+        {cards &&
+          cards.map((card, index) => {
+            return (
+              <div key={index}>
+                <Card
+                  style={{ marginTop: "5%", backgroundColor: "#ccdff2" }}
+                  sx={{ maxWidth: 200 }}
+                >
+                  <CardMedia
+                    component="img"
+                    height="250"
+                    image={card.src}
+                    alt={card.name}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {card.name}
+                    </Typography>
+                    <FormControl>
+                      <RadioGroup
+                        row
+                        aria-labelledby="demo-row-radio-buttons-group-label"
+                        name="row-radio-buttons-group"
+                      >
+                        <FormControlLabel
+                          value={`{"card": ${index}, "power":${card.strong}}`}
+                          control={<Radio />}
+                          label={`Strong :${card.strong}`}
+                          onChange={handleChange}
+                        />
+                        <FormControlLabel
+                          value={`{"card": ${index}, "power":${card.speed}}`}
+                          control={<Radio />}
+                          label={`Speed :${card.speed}`}
+                          onChange={handleChange}
+                        />
+                        <FormControlLabel
+                          value={`{"card": ${index}, "power":${card.agility}}`}
+                          control={<Radio />}
+                          label={`Agility :${card.agility}`}
+                          onChange={handleChange}
+                        />
+                        <FormControlLabel
+                          value={`{"card": ${index}, "power":${card.smartness}}`}
+                          control={<Radio />}
+                          label={`Smartness :${card.smartness}`}
+                          onChange={handleChange}
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  </CardContent>
+                </Card>
+              </div>
+            );
+          })}
         <Status_container>
           <h2>Status:</h2>
           {status && <p>{status}</p>}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import socket from "./client";
+import socket from "./assets/client";
 
 import { useNavigate, useLocation } from "react-router-dom";
 

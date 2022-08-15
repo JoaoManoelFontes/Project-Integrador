@@ -17,7 +17,7 @@ import TextField from "@mui/material/TextField";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Alert from "@mui/material/Alert";
 
-import socket from "../client";
+import socket from "../assets/client";
 
 import { useNavigate } from "react-router-dom";
 
@@ -51,7 +51,6 @@ export default function Home() {
 
   //?Effects
   React.useEffect(() => {
-    console.log(rooms.length);
     socket.on("roomGenerated", (data) => {
       setRoom(data.room);
       SetStatus(data.status);
