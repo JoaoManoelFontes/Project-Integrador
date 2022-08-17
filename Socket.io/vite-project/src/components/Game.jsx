@@ -48,9 +48,6 @@ export default function Game() {
       .get()
       .then(({ data }) => {
         setCards(data.cards);
-        cards.map((card) => {
-          card.src = require(card.src);
-        });
       })
       .catch((err) => {
         console.log(err.response.body);

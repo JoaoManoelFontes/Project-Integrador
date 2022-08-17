@@ -1,5 +1,6 @@
 const express = require("express");
 const router = require("./router");
+const path = require("path");
 const cors = require("cors");
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(
     })
 );
 
+app.use(express.static(path.join(__dirname, "public")));
 app.use("/api", router);
 app.listen(3333, () => {
     console.log("server listening on port 3333!");

@@ -2,7 +2,7 @@
 
 module.exports = [{
         name: "BoyCard",
-        src: "C:/Users/João Manoel/Documents/manu/repos/Personal_Integrador/Socket.io/Server/cards_api/images/boyCard.jpeg",
+        src: "http://localhost:3333/boyCard.jpeg",
         strong: 79,
         speed: 90,
         agility: 91,
@@ -10,7 +10,7 @@ module.exports = [{
     },
     {
         name: "GirlCard",
-        src: "C:/Users/João Manoel/Documents/manu/repos/Personal_Integrador/Socket.io/Server/cards_api/images/girlCard.jpeg",
+        src: "http://localhost:3333/girlCard.jpeg",
         strong: 82,
         speed: 80,
         agility: 91,
