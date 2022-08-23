@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import socket from "../assets/client";
+import socket from "../services/client";
 import styled from "styled-components";
 
 import Card from "@mui/material/Card";
@@ -13,7 +13,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 
-import api from "../assets/api";
+import api from "../services/api";
 
 const Card_container = styled.div`
   display: flex;

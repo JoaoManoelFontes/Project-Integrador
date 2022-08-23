@@ -1,38 +1,24 @@
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
+import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Alert from "@mui/material/Alert";
 
-import socket from "../assets/client";
-
+import socket from "../services/client";
 import { useNavigate } from "react-router-dom";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import Header from "../components/commons/Header";
+import Footer from "../components/commons/Footer";
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -40,17 +26,17 @@ const theme = createTheme();
 
 export default function Home() {
   //?States & Hooks
-  const [socketId, setSocketId] = React.useState(null);
-  const [room, setRoom] = React.useState(null);
-  const [status, SetStatus] = React.useState(null);
-  const [roomId, setRoomId] = React.useState("");
-  const [roomError, setRoomError] = React.useState(null);
-  const [rooms, setRooms] = React.useState([]);
+  const [socketId, setSocketId] = useState(null);
+  const [room, setRoom] = useState(null);
+  const [status, SetStatus] = useState(null);
+  const [roomId, setRoomId] = useState("");
+  const [roomError, setRoomError] = useState(null);
+  const [rooms, setRooms] = useState([]);
 
   const navigate = useNavigate();
 
   //?Effects
-  React.useEffect(() => {
+  useEffect(() => {
     socket.on("roomGenerated", (data) => {
       setRoom(data.room);
       SetStatus(data.status);
@@ -85,13 +71,7 @@ export default function Home() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            CardGame
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <Header />
       <main>
         {/* Hero unit */}
         <Box
@@ -224,23 +204,7 @@ export default function Home() {
           </Grid>
         </Container>
       </main>
-      {/* Footer */}
-      <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          Something here to give the footer a purpose!
-        </Typography>
-        <Copyright />
-      </Box>
-
-      {/* End footer */}
+      <Footer />
     </ThemeProvider>
   );
 }
