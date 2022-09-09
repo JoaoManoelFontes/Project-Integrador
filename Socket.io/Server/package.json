@@ -6,7 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "nodemon ./server.js",
-        "startApi": "nodemon ./cards_api/server.js"
+        "start_api": "nodemon ./cards_api/server.js"
     },
     "keywords": [],
     "author": "",

@@ -13,6 +13,39 @@ io.on("connection", (socket) => {
     socket.emit("newRoom", rooms);
     socket.emit("myId", socket.id);
 
+    //?Função batalhar - entrando em uma sala aleatória
+    socket.on("battle", () => {
+        if (rooms.length == 0) {
+            socket.emit(
+                "joinRoomError",
+                "Não existe nenhuma sala disponível no momento, crie uma para continuar"
+            );
+        } else {
+            rooms.map((room, index) => {
+                if (clients[room] == 1) {
+                    clients[room]++;
+                    socket.join(room);
+                    socket.room = room;
+                    socket.emit("roomJoined", {
+                        room: room,
+                        status: "player 2 joined, waiting to start the game",
+                    });
+                    io.to(room).emit(
+                        "status",
+                        "player 2 joined, waiting to start the game"
+                    );
+                    io.to(room).emit("playerId", socket.id);
+                    rooms.splice(rooms.indexOf(room), 1);
+                } else if (clients[room] == 2 && index == rooms.length - 1) {
+                    socket.emit(
+                        "joinRoomError",
+                        "Não existe nenhuma sala disponível no momento, crie uma para continuar"
+                    );
+                }
+            });
+        }
+    });
+
     //?Criando uma sala
     socket.on("generateRoom", () => {
         socket.join(socket.id);

@@ -64,6 +64,10 @@ export default function Home() {
     socket.emit("generateRoom");
   };
 
+  const handleBattle = () => {
+    socket.emit("battle");
+  };
+
   const handleJoin = () => {
     socket.emit("joinRoom", roomId);
   };
@@ -203,6 +207,7 @@ export default function Home() {
             ))}
           </Grid>
         </Container>
+        <Button onClick={handleBattle}>Click</Button>
       </main>
       <Footer />
     </ThemeProvider>
