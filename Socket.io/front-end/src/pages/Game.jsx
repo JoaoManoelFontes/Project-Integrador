@@ -3,10 +3,16 @@ import { useNavigate, useLocation } from "react-router-dom";
 import socket from "../services/client";
 import styled from "styled-components";
 
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
+import {
+  Button,
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  Alert,
+  Stack,
+} from "@mui/material";
+import { Box, Container } from "@mui/system";
 
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -14,6 +20,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 
 import api from "../services/api";
+import Header from "../components/commons/Header";
+import Footer from "../components/commons/Footer";
+import Battle from "../components/Battle";
 
 const Card_container = styled.div`
   display: flex;
@@ -70,6 +79,7 @@ export default function Game() {
   }, [socket]);
 
   //?Handle Functions
+
   const handleChange = (e) => {
     setPlayerCard(JSON.parse(e.target.value));
   };
@@ -84,95 +94,101 @@ export default function Game() {
 
   //? Render
   return (
-    <div>
-      <h1>Game</h1>
-      <div>
-        <p>
-          {state.socketId} (you) - vs -
-          {playerId == null ? " waiting for player" : " " + playerId}
-        </p>
-      </div>
-      <Card_container>
-        {cards &&
-          cards.map((card, index) => {
-            return (
-              <div key={index}>
-                <Card
-                  style={{ marginTop: "5%", backgroundColor: "#ccdff2" }}
-                  sx={{ maxWidth: 200 }}
-                >
-                  <CardMedia
-                    component="img"
-                    height="250"
-                    image={card.src}
-                    alt={card.name}
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {card.name}
-                    </Typography>
-                    <FormControl>
-                      <RadioGroup
-                        row
-                        aria-labelledby="demo-row-radio-buttons-group-label"
-                        name="row-radio-buttons-group"
-                      >
-                        <FormControlLabel
-                          value={`{"card": ${index}, "power":${card.strong}}`}
-                          control={<Radio />}
-                          label={`Strong :${card.strong}`}
-                          onChange={handleChange}
-                        />
-                        <FormControlLabel
-                          value={`{"card": ${index}, "power":${card.speed}}`}
-                          control={<Radio />}
-                          label={`Speed :${card.speed}`}
-                          onChange={handleChange}
-                        />
-                        <FormControlLabel
-                          value={`{"card": ${index}, "power":${card.agility}}`}
-                          control={<Radio />}
-                          label={`Agility :${card.agility}`}
-                          onChange={handleChange}
-                        />
-                        <FormControlLabel
-                          value={`{"card": ${index}, "power":${card.smartness}}`}
-                          control={<Radio />}
-                          label={`Smartness :${card.smartness}`}
-                          onChange={handleChange}
-                        />
-                      </RadioGroup>
-                    </FormControl>
-                  </CardContent>
-                </Card>
+    <>
+      <Header />
+      <main>
+        <h1>Game</h1>
+        <div>
+          <p>
+            {state.socketId} (you) - vs -
+            {playerId == null ? " waiting for player" : " " + playerId}
+          </p>
+        </div>
+        <Battle state={state} />
+        <Card_container>
+          {cards &&
+            cards.map((card, index) => {
+              return (
+                <div key={index}>
+                  <Card
+                    style={{ marginTop: "5%", backgroundColor: "#ccdff2" }}
+                    sx={{ maxWidth: 200 }}
+                  >
+                    <CardMedia
+                      component="img"
+                      height="250"
+                      image={card.src}
+                      alt={card.name}
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="div">
+                        {card.name}
+                      </Typography>
+                      <FormControl>
+                        <RadioGroup
+                          row
+                          aria-labelledby="demo-row-radio-buttons-group-label"
+                          name="row-radio-buttons-group"
+                        >
+                          <FormControlLabel
+                            value={`{"card": ${index}, "power":${card.strong}}`}
+                            control={<Radio />}
+                            label={`Strong :${card.strong}`}
+                            onChange={handleChange}
+                          />
+                          <FormControlLabel
+                            value={`{"card": ${index}, "power":${card.speed}}`}
+                            control={<Radio />}
+                            label={`Speed :${card.speed}`}
+                            onChange={handleChange}
+                          />
+                          <FormControlLabel
+                            value={`{"card": ${index}, "power":${card.agility}}`}
+                            control={<Radio />}
+                            label={`Agility :${card.agility}`}
+                            onChange={handleChange}
+                          />
+                          <FormControlLabel
+                            value={`{"card": ${index}, "power":${card.smartness}}`}
+                            control={<Radio />}
+                            label={`Smartness :${card.smartness}`}
+                            onChange={handleChange}
+                          />
+                        </RadioGroup>
+                      </FormControl>
+                    </CardContent>
+                  </Card>
+                </div>
+              );
+            })}
+          <Status_container>
+            <h2>Status:</h2>
+            {status && <p>{status}</p>}
+            {roomError && (
+              <div>
+                <p>{roomError}</p>
+                <a href="/">
+                  <button>Back</button>
+                </a>
               </div>
-            );
-          })}
-        <Status_container>
-          <h2>Status:</h2>
-          {status && <p>{status}</p>}
-          {roomError && (
-            <div>
-              <p>{roomError}</p>
-              <a href="/">
-                <button>Back</button>
-              </a>
-            </div>
-          )}
-        </Status_container>
-      </Card_container>
-      {playerCard && <button onClick={handleFormSend}>Click</button>}
-      {winner != null ? (
-        navigate("/game-result", {
-          state: {
-            winner,
-            socketId: state.socketId,
-            status,
-          },
-        })
-      ) : (
-        <p></p>
-      )}
-    </div>
+            )}
+          </Status_container>
+        </Card_container>
+        {playerCard && <Button onClick={handleFormSend}>Click</Button>}
+        {winner != null ? (
+          navigate("/game-result", {
+            state: {
+              winner,
+              socketId: state.socketId,
+              status,
+            },
+          })
+        ) : (
+          <p></p>
+        )}
+        <br />
+      </main>
+      <Footer />
+    </>
   );
 }

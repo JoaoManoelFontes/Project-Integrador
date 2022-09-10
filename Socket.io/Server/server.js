@@ -35,7 +35,10 @@ io.on("connection", (socket) => {
                         "player 2 joined, waiting to start the game"
                     );
                     io.to(room).emit("playerId", socket.id);
-                    rooms.splice(rooms.indexOf(room), 1);
+                    io.to(room).emit(
+                        "cardStatus",
+                        `ID: ${socket.id.substr(0, 8)}... <br />Jogador encontrado`
+                    );
                 } else if (clients[room] == 2 && index == rooms.length - 1) {
                     socket.emit(
                         "joinRoomError",
@@ -70,7 +73,10 @@ io.on("connection", (socket) => {
             });
             io.to(room).emit("status", "player 2 joined, waiting to start the game");
             io.to(room).emit("playerId", socket.id);
-            rooms.splice(rooms.indexOf(room), 1);
+            io.to(room).emit(
+                "cardStatus",
+                `ID: ${socket.id.substr(0, 8)}... <br />Jogador encontrado`
+            );
         } else {
             socket.emit(
                 "joinRoomError",
@@ -84,6 +90,7 @@ io.on("connection", (socket) => {
         if (players[room] == undefined) {
             players[room] = { player1: { playerCard, id }, player2: undefined };
             io.to(room).emit("status", socket.id + " has already choices his card");
+            io.to(room).emit("senderId", socket.id);
         } else if (players[room].player2 == undefined) {
             players[room].player2 = { playerCard, id };
             io.to(room).emit("status", "Players has already choices his card");
@@ -102,6 +109,7 @@ io.on("connection", (socket) => {
 
     //? saindo da conexão com o server
     socket.on("disconnect", () => {
+        rooms.splice(rooms.indexOf(socket.room), 1);
         clients[socket.room]--;
         players[socket.room] = undefined;
         console.log("Client disconnected");

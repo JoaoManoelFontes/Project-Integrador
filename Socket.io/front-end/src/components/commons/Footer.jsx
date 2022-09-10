@@ -1,32 +1,43 @@
+import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
+
 function Copyright() {
   return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
+    <>
+      <br />
+      <Typography variant="body2" color="text.secondary" align="center">
+        {"Copyright © "}
+        <Link color="inherit" href="https://mui.com/">
+          Your Website
+        </Link>{" "}
+        {new Date().getFullYear()}
+        {"."}
+      </Typography>
+    </>
   );
 }
 
 export default function Footer() {
   return (
-    <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
+    <Box
+      sx={{
+        bgcolor: "footer.main",
+        p: 3,
+      }}
+      component="footer"
+    >
       <Typography variant="h6" align="center" gutterBottom>
-        Footer
+        CardGame
       </Typography>
       <Typography
         variant="subtitle1"
         align="center"
-        color="text.secondary"
+        color="text.primary"
         component="p"
       >
-        Something here to give the footer a purpose!
+        O melhor jogo de cartas ntf!
       </Typography>
       <Copyright />
     </Box>
