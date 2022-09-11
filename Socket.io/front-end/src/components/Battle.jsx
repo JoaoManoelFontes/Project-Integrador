@@ -15,20 +15,26 @@ import { useEffect, useState } from "react";
 import socket from "../services/client";
 
 export default function Battle({ state }) {
+  //?Props
   let { socketId, room } = state;
   let prevStatus = state.status;
   //?States
   const [status, setStatus] = useState(prevStatus);
+
   const [shadowColor1, setShadowColor1] = useState("#786ff5");
   const [textCard1, setTextCard1] = useState(
     `ID: ${socketId.substr(0, 8)}... <br /> Escolha sua carta`
   );
+
   const [shadowColor2, setShadowColor2] = useState("#786ff5");
   const [textCard2, setTextCard2] = useState("");
   //? Effects
   useEffect(() => {
+    //?Descobrir o texto da cartinha 2
+    //? Se for o jogador que entrou em uma sala já criada
     if (socketId != room) {
       setTextCard2(`ID: ${room.substr(0, 8)}... <br /> Jogador Encontrado`);
+      //? Se for o jogador que está esperando alguém entrar na sala dele
     } else {
       setTextCard2("Jogador ainda <br/> não encontrado");
     }
@@ -49,6 +55,8 @@ export default function Battle({ state }) {
 
     socket.on("status", (data) => setStatus(data));
   }, [socket]);
+
+  //?Render
   return (
     <Container maxWidth="md" sx={{ marginTop: "5%" }}>
       <Box sx={{ marginBottom: "5%" }}>
@@ -59,7 +67,7 @@ export default function Battle({ state }) {
           color="primary"
           sx={{ fontWeight: "bold" }}
         >
-          PARTIDA
+          SALA
         </Typography>
         <Typography variant="body2" align="center" color="dark" gutterBottom>
           ID = {room}

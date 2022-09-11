@@ -91,6 +91,9 @@ io.on("connection", (socket) => {
             players[room] = { player1: { playerCard, id }, player2: undefined };
             io.to(room).emit("status", socket.id + " has already choices his card");
             io.to(room).emit("senderId", socket.id);
+            console.log(players[room].player1.id);
+        } else if (players[room].player1.id == socket.id) {
+            socket.emit("status", "You only can pick a card 1 time ");
         } else if (players[room].player2 == undefined) {
             players[room].player2 = { playerCard, id };
             io.to(room).emit("status", "Players has already choices his card");
@@ -102,8 +105,6 @@ io.on("connection", (socket) => {
                     cardId: result.cardId,
                 });
             })();
-        } else {
-            socket.emit("status", "You only can pick a card 1 time ");
         }
     });
 
