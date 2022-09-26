@@ -28,7 +28,7 @@ export default function Home() {
   const [status, SetStatus] = useState(null);
   const [roomId, setRoomId] = useState("");
   const [roomError, setRoomError] = useState(null);
-  const [rooms, setRooms] = useState([]);
+  // const [rooms, setRooms] = useState([]);
 
   const navigate = useNavigate();
 
@@ -39,7 +39,7 @@ export default function Home() {
       SetStatus(data.status);
     });
 
-    socket.on("newRoom", (data) => setRooms(data));
+    // socket.on("newRoom", (data) => setRooms(data));
 
     socket.on("roomJoined", (data) => {
       setRoom(data.room);
@@ -61,10 +61,6 @@ export default function Home() {
     socket.emit("generateRoom");
   };
 
-  const handleBattle = () => {
-    socket.emit("battle");
-  };
-
   const handleJoin = () => {
     socket.emit("joinRoom", roomId);
   };
@@ -75,7 +71,6 @@ export default function Home() {
       <main>
         <MainPost />
         <br />
-        {/* Hero unit */}
         <Box
           sx={{
             bgcolor: "background.paper",
@@ -115,17 +110,18 @@ export default function Home() {
               <Button variant="outlined" onClick={handleJoin}>
                 Entrar
               </Button>
-              {/*?Redirecionar para a sala do jogo*/}
-              {room != null && status != null && socketId != null
-                ? navigate("/game", {
-                    state: {
-                      room,
-                      status,
-                      socketId,
-                    },
-                  })
-                : null}
             </Stack>
+            {/*?Redirecionar para a sala do jogo*/}
+            {room != null && status != null && socketId != null
+              ? navigate("/game", {
+                  state: {
+                    room,
+                    status,
+                    socketId,
+                  },
+                })
+              : null}
+            {/* Se tiver algum erro */}
             {roomError && (
               <Stack
                 style={{ marginTop: "5%" }}
@@ -137,7 +133,9 @@ export default function Home() {
                 </Alert>
               </Stack>
             )}
-            {rooms.length > 0 ? (
+
+            {/* Mostrar as salas disponiveis */}
+            {/* {rooms.length > 0 ? (
               rooms.map((room, index) => {
                 return (
                   <div key={index}>
@@ -155,7 +153,7 @@ export default function Home() {
               })
             ) : (
               <></>
-            )}
+            )} */}
           </Container>
         </Box>
       </main>
