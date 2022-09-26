@@ -10,7 +10,7 @@ let players = {};
 //?Socket events
 io.on("connection", (socket) => {
     console.log("New client connected: " + socket.id);
-    socket.emit("newRoom", rooms);
+    // socket.emit("newRoom", rooms);
     socket.emit("myId", socket.id);
 
     //?Função batalhar - entrando em uma sala aleatória
@@ -91,7 +91,6 @@ io.on("connection", (socket) => {
             players[room] = { player1: { playerCard, id }, player2: undefined };
             io.to(room).emit("status", socket.id + " has already choices his card");
             io.to(room).emit("senderId", socket.id);
-            console.log(players[room].player1.id);
         } else if (players[room].player1.id == socket.id) {
             socket.emit("status", "You only can pick a card 1 time ");
         } else if (players[room].player2 == undefined) {
@@ -110,9 +109,21 @@ io.on("connection", (socket) => {
 
     //? saindo da conexão com o server
     socket.on("disconnect", () => {
-        rooms.splice(rooms.indexOf(socket.room), 1);
-        clients[socket.room]--;
-        players[socket.room] = undefined;
+        rooms.map((room) => {
+            if (socket.room == room) {
+                io.to(room).emit(
+                    "leavesRoomError",
+                    "Um jogador deixou esta sala, volte para a página inicial e procure outra batalha"
+                );
+            }
+        });
+        if (socket.room != undefined) {
+            clients[socket.room]--;
+            players[socket.room] = undefined;
+            if (clients[socket.room] == 0) {
+                rooms.splice(socket.room, 1);
+            }
+        }
         console.log("Client disconnected");
     });
 });
