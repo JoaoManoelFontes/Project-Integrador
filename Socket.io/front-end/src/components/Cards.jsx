@@ -36,6 +36,17 @@ export default function Cards(props) {
 
   return (
     <>
+      <Typography
+        component="h1"
+        variant="h4"
+        align="left"
+        color="primary"
+        sx={{ fontWeight: "bold", margin: "5%" }}
+        gutterBottom
+      >
+        Escolha Sua Carta
+      </Typography>
+      <br />
       <Container
         maxWidth="lg"
         sx={{
