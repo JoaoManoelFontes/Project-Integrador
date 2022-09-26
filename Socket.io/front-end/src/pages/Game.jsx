@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import socket from "../services/client";
 import styled from "styled-components";
-
+import { Box } from "@mui/system";
+import { Typography } from "@mui/material";
 import Alert from "@mui/material/Alert";
 
 import api from "../services/api";
@@ -11,19 +12,7 @@ import Footer from "../components/commons/Footer";
 import Battle from "../components/Battle";
 import Cards from "../components/Cards";
 import { Container } from "@mui/system";
-
-const Card_container = styled.div`
-  display: flex;
-  padding: 1em;
-  flex-flow: row wrap;
-  justify-content: space-around;
-  align-content: space-around;
-  margin-top: 3%;
-`;
-
-const Status_container = styled.div`
-  margin-left: 2%;
-`;
+import { Button } from "@mui/material";
 
 export default function Game() {
   //? States & Hooks
@@ -31,12 +20,14 @@ export default function Game() {
   const navigate = useNavigate();
 
   const [status, setStatus] = useState(null);
-  const [roomError, setRoomError] = useState(null);
-  const [playerCard, setPlayerCard] = useState(null);
   const [winner, setWinner] = useState(null);
   const [playerId, setPlayerId] = useState(null);
+  const [roomError, setRoomError] = useState(null);
 
   const [cards, setCards] = useState();
+
+  const [toogle, setToogle] = useState(false);
+  const [timer, setTimer] = useState(6);
 
   //?Effects
   useEffect(() => {
@@ -57,29 +48,37 @@ export default function Game() {
     setStatus(state.status);
   }, []);
 
+  // ?Timer effect
+  useEffect(() => {
+    if (toogle) {
+      if (timer > 0) {
+        setTimeout(() => {
+          setTimer(timer - 1);
+        }, 1000);
+      } else {
+        navigate("/game-result", {
+          state: {
+            winner,
+            socketId: state.socketId,
+            status,
+          },
+        });
+      }
+    }
+  }, [timer, toogle]);
+
   useEffect(() => {
     socket.on("status", (data) => setStatus(data));
 
-    socket.on("winner", (data) => setWinner(data));
+    socket.on("winner", (data) => {
+      setWinner(data);
+      setToogle(true);
+    });
 
     socket.on("playerId", (data) => setPlayerId(data));
 
-    socket.on("roomError", (data) => setRoomError(data));
+    socket.on("leavesRoomError", (data) => setRoomError(data));
   }, [socket]);
-
-  //?Handle Functions
-
-  const handleChange = (e) => {
-    setPlayerCard(JSON.parse(e.target.value));
-  };
-
-  const handleFormSend = () => {
-    socket.emit("sendCard", {
-      playerCard,
-      room: state.room,
-      id: state.socketId,
-    });
-  };
 
   //? Render
   return (
@@ -87,18 +86,35 @@ export default function Game() {
       <Header />
       <main>
         <Battle state={state} />
-        {winner != null ? (
-          navigate("/game-result", {
-            state: {
-              winner,
-              socketId: state.socketId,
-              status,
-            },
-          })
-        ) : (
-          <p></p>
-        )}
         <br />
+        {/* Timer render */}
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "nowrap",
+            flexDirection: "column",
+            justifyContent: "center ",
+          }}
+        >
+          <Typography
+            variant="body2"
+            color="black"
+            align="center"
+            sx={{ display: toogle ? "block" : "none" }}
+          >
+            O resultado será mostrado em ... <br /> <span>00:0{timer}</span>
+          </Typography>
+        </Box>
+        {roomError && (
+          <Container maxWidth="md" sx={{ marginBottom: "5%" }}>
+            <Alert variant="outlined" severity="info">
+              {roomError}
+            </Alert>
+            <Link to="/">
+              <Button>Voltar</Button>
+            </Link>
+          </Container>
+        )}
         {playerId != null ? (
           <Cards state={cards} room={state.room} socketId={state.socketId} />
         ) : (
