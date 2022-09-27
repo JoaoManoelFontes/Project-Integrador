@@ -115,8 +115,6 @@ export default function Game() {
               {roomError}
             </Alert>
             <Link to="/">
-
-        {/* Card component - just when the room is already full */}
               <Button>Voltar</Button>
             </Link>
           </Container>
