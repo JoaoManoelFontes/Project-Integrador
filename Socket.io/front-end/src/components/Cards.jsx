@@ -1,32 +1,39 @@
+// ? React hooks imports
+import { useState } from "react";
+
+// ? Material imports
 import {
   Button,
   Card,
   CardMedia,
   CardContent,
   Typography,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
 } from "@mui/material";
 import { Container } from "@mui/system";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
 
-import { useEffect, useState } from "react";
-
+// ? socket client import
 import socket from "../services/client";
 
 export default function Cards(props) {
+  // ? props
   const { state, room, socketId } = props;
 
   //?States
   const [playerCard, setPlayerCard] = useState(null);
 
   //? handle functions
+
   const handleChange = (e) => {
+    // ? Manda a caritnha que o player escolheu em forma de json pro state
     setPlayerCard(JSON.parse(e.target.value));
   };
 
   const handleFormSend = () => {
+    // ? Manda a cartinha escolhida para o socket, não pode mais trocar de carta
     socket.emit("sendCard", {
       playerCard,
       room: room,
@@ -36,6 +43,7 @@ export default function Cards(props) {
 
   return (
     <>
+      {/* Card header */}
       <Typography
         component="h1"
         variant="h4"
@@ -56,6 +64,7 @@ export default function Cards(props) {
           flexWrap: "wrap",
         }}
       >
+        {/* Cards list */}
         {state?.map((card, index) => {
           return (
             <div key={index}>
@@ -73,6 +82,8 @@ export default function Cards(props) {
                   <Typography gutterBottom variant="h5" component="div">
                     {card.name}
                   </Typography>
+
+                  {/* Cards attributes form */}
                   <FormControl>
                     <RadioGroup
                       row
@@ -111,7 +122,7 @@ export default function Cards(props) {
           );
         })}
       </Container>
-
+      {/* Choose card button - HAVE TO RELOCATE */}
       {playerCard && <Button onClick={handleFormSend}>Click</Button>}
     </>
   );

@@ -33,7 +33,9 @@ export default function Home() {
   const navigate = useNavigate();
 
   //?Effects
+
   useEffect(() => {
+    // ?Socket actions
     socket.on("roomGenerated", (data) => {
       setRoom(data.room);
       SetStatus(data.status);
@@ -47,16 +49,15 @@ export default function Home() {
     });
 
     //? socket room errors
-    socket.on("joinRoomError", (data) => {
-      setRoomError(data);
-      console.log(data);
-    });
+    socket.on("joinRoomError", (data) => setRoomError(data));
+
     socket.on("hostLeavesRoomError", (data) => setRoomError(data));
 
     socket.on("myId", (data) => setSocketId(data));
   }, [socket]);
 
   //? Handle Functions
+
   const generateRoom = () => {
     socket.emit("generateRoom");
   };
@@ -65,12 +66,14 @@ export default function Home() {
     socket.emit("joinRoom", roomId);
   };
 
+  // ?Render
   return (
     <>
       <Header />
       <main>
         <MainPost />
         <br />
+        {/* enter a room form   */}
         <Box
           sx={{
             bgcolor: "background.paper",
@@ -111,17 +114,8 @@ export default function Home() {
                 Entrar
               </Button>
             </Stack>
-            {/*?Redirecionar para a sala do jogo*/}
-            {room != null && status != null && socketId != null
-              ? navigate("/game", {
-                  state: {
-                    room,
-                    status,
-                    socketId,
-                  },
-                })
-              : null}
-            {/* Se tiver algum erro */}
+
+            {/* Errors component */}
             {roomError && (
               <Stack
                 style={{ marginTop: "5%" }}
@@ -134,7 +128,20 @@ export default function Home() {
               </Stack>
             )}
 
-            {/* Mostrar as salas disponiveis */}
+            {/* Redirect to the game room */}
+
+            {room != null && status != null && socketId != null
+              ? navigate("/game", {
+                  state: {
+                    room,
+                    status,
+                    socketId,
+                  },
+                })
+              : null}
+
+            {/* Show aveliable rooms - not in use */}
+
             {/* {rooms.length > 0 ? (
               rooms.map((room, index) => {
                 return (

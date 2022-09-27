@@ -1,23 +1,21 @@
-import {
-  Button,
-  Card,
-  CardMedia,
-  CardContent,
-  Typography,
-  Alert,
-  Stack,
-} from "@mui/material";
-import { Box, Container } from "@mui/system";
-import parse from "html-react-parser";
-
+// ? React hooks imports
 import { useEffect, useState } from "react";
 
+// ? material imports
+import { Card, CardContent, Typography } from "@mui/material";
+import { Box, Container } from "@mui/system";
+
+// ? socket client import
 import socket from "../services/client";
+
+// ? Util import - parse string to html
+import parse from "html-react-parser";
 
 export default function Battle({ state }) {
   //?Props
   let { socketId, room } = state;
   let prevStatus = state.status;
+
   //?States
   const [status, setStatus] = useState(prevStatus);
 
@@ -28,24 +26,32 @@ export default function Battle({ state }) {
 
   const [shadowColor2, setShadowColor2] = useState("#786ff5");
   const [textCard2, setTextCard2] = useState("");
+
   //? Effects
   useEffect(() => {
-    //?Descobrir o texto da cartinha 2
-    //? Se for o jogador que entrou em uma sala já criada
+    // ? Descobrir o texto da cartinha 2
+
     if (socketId != room) {
+      // Se for o jogador que entrou em uma sala já criada
       setTextCard2(`ID: ${room.substr(0, 8)}... <br /> Jogador Encontrado`);
-      //? Se for o jogador que está esperando alguém entrar na sala dele
     } else {
+      // Se for o jogador que está esperando alguém entrar na sala dele
       setTextCard2("Jogador ainda <br/> não encontrado");
     }
   }, []);
 
   useEffect(() => {
+    // ? Socket actions
+
     socket.on("senderId", (data) => {
+      //? Ao escolher a cartinha
+
       if (data == socketId) {
+        // se foi o próprio jogador que escolheu
         setShadowColor1("#5cf0b7");
         setTextCard1(`ID: ${data.substr(0, 8)}... <br /> Carta escolhida!`);
       } else {
+        // Se foi o adversário que escolheu
         setShadowColor2("#5cf0b7");
         setTextCard2(`ID: ${data.substr(0, 8)}... <br /> Carta escolhida!`);
       }
@@ -59,6 +65,7 @@ export default function Battle({ state }) {
   //?Render
   return (
     <Container maxWidth="md" sx={{ marginTop: "5%" }}>
+      {/* Battle component header */}
       <Box sx={{ marginBottom: "5%" }}>
         <Typography
           component="h1"
@@ -73,6 +80,7 @@ export default function Battle({ state }) {
           ID = {room}
         </Typography>
       </Box>
+      {/* Cards components */}
       <Box
         sx={{
           borderRadius: 2,
@@ -90,6 +98,7 @@ export default function Battle({ state }) {
             justifyContent: "space-between",
           }}
         >
+          {/* Player 1 card */}
           <Card
             sx={{
               minHeight: 200,
@@ -113,6 +122,7 @@ export default function Battle({ state }) {
               <Typography variant="body2">{parse(textCard1)}</Typography>
             </CardContent>
           </Card>
+
           <Typography
             component="h1"
             variant="h3"
@@ -122,6 +132,8 @@ export default function Battle({ state }) {
           >
             VS
           </Typography>
+
+          {/* Player 2 card */}
           <Card
             sx={{
               minHeight: 200,
@@ -146,6 +158,8 @@ export default function Battle({ state }) {
             </CardContent>
           </Card>
         </Box>
+
+        {/* Bame status bar */}
         <Box>
           <Typography
             variant="h5"
