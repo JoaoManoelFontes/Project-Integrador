@@ -8,7 +8,7 @@ import { Box, Container } from "@mui/system";
 // ? socket client import
 import socket from "../services/client";
 
-// ? Util import - parse string to html
+// ? Service import - parse string to html
 import parse from "html-react-parser";
 
 export default function Battle({ state }) {

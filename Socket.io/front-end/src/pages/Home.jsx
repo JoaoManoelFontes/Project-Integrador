@@ -1,25 +1,24 @@
+// ? react hooks imports
 import { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack";
-import Container from "@mui/material/Container";
-import TextField from "@mui/material/TextField";
-import Alert from "@mui/material/Alert";
-
-import socket from "../services/client";
 import { useNavigate } from "react-router-dom";
 
+// ? material imports
+import {
+  Button,
+  Typography,
+  Stack,
+  Container,
+  TextField,
+  Alert,
+} from "@mui/material";
+
+// ? socket client import
+import socket from "../services/client";
+
+//? Components render imports
 import Header from "../components/commons/Header";
 import Footer from "../components/commons/Footer";
 import MainPost from "../components/MainPost";
-
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 export default function Home() {
   //?States & Hooks

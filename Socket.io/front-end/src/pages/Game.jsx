@@ -1,17 +1,22 @@
+// ? React imports
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
-import socket from "../services/client";
-import { Box } from "@mui/system";
-import { Typography } from "@mui/material";
-import Alert from "@mui/material/Alert";
 
+// ? Material imports
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import { Typography, Button, Alert } from "@mui/material";
+import { Container, Box } from "@mui/system";
+
+// ? Service import - getting cards api through axios
 import api from "../services/api";
+
+// ? socket client import
+import socket from "../services/client";
+
+//? Components render imports
 import Header from "../components/commons/Header";
 import Footer from "../components/commons/Footer";
 import Battle from "../components/Battle";
 import Cards from "../components/Cards";
-import { Container } from "@mui/system";
-import { Button } from "@mui/material";
 
 export default function Game() {
   //? States & Hooks
