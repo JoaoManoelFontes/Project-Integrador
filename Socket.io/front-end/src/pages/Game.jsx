@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import socket from "../services/client";
-import styled from "styled-components";
 import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
 import Alert from "@mui/material/Alert";
@@ -30,8 +29,9 @@ export default function Game() {
   const [timer, setTimer] = useState(6);
 
   //?Effects
+
   useEffect(() => {
-    //Getting cards from api
+    // ?Getting cards from api
     api
       .get()
       .then(({ data }) => {
@@ -48,8 +48,8 @@ export default function Game() {
     setStatus(state.status);
   }, []);
 
-  // ?Timer effect
   useEffect(() => {
+    // ?Timer effect
     if (toogle) {
       if (timer > 0) {
         setTimeout(() => {
@@ -68,6 +68,7 @@ export default function Game() {
   }, [timer, toogle]);
 
   useEffect(() => {
+    // ? Socket actions effect
     socket.on("status", (data) => setStatus(data));
 
     socket.on("winner", (data) => {
@@ -87,6 +88,7 @@ export default function Game() {
       <main>
         <Battle state={state} />
         <br />
+
         {/* Timer render */}
         <Box
           sx={{
@@ -105,6 +107,8 @@ export default function Game() {
             O resultado será mostrado em ... <br /> <span>00:0{timer}</span>
           </Typography>
         </Box>
+
+        {/* Error component */}
         {roomError && (
           <Container maxWidth="md" sx={{ marginBottom: "5%" }}>
             <Alert variant="outlined" severity="info">
@@ -115,6 +119,8 @@ export default function Game() {
             </Link>
           </Container>
         )}
+
+        {/* Card component - just when the room is already full */}
         {playerId != null ? (
           <Cards state={cards} room={state.room} socketId={state.socketId} />
         ) : (
