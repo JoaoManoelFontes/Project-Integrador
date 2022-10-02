@@ -74,7 +74,7 @@ export default function Game() {
 
   useEffect(() => {
     // ? Socket actions effect
-    socket.on("status", (data) => setStatus(data));
+    socket.on("result_status", (data) => setStatus(data));
 
     socket.on("winner", (data) => {
       setWinner(data);
