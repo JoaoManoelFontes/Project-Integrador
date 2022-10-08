@@ -3,10 +3,10 @@ import { createTheme } from "@mui/material";
 export const theme = createTheme({
   palette: {
     primary: {
-      main: "#786ff5",
+      main: "#593016",
     },
     secondary: { main: "#67b7d6" },
-    footer: { main: "#e5f1f5be" },
+    footer: { main: "#A8795B" },
   },
   typography: {
     fontFamily: "'Nunito', 'Ubuntu'",

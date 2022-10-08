@@ -42,12 +42,18 @@ export default function Cards(props) {
   };
 
   return (
-    <>
+    <Container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        align="center"
+        sx={{ marginBottom: "32px" }}
+      >
       {/* Card header */}
       <Typography
         component="h1"
         variant="h4"
-        align="left"
+        align="center"
         color="primary"
         sx={{ fontWeight: "bold", margin: "5%" }}
         gutterBottom
@@ -121,9 +127,10 @@ export default function Cards(props) {
             </div>
           );
         })}
+        
       </Container>
       {/* Choose card button - HAVE TO RELOCATE */}
-      {playerCard && <Button onClick={handleFormSend}>Click</Button>}
-    </>
+      {playerCard && <Button variant="contained" onClick={handleFormSend}>Play</Button>}
+    </Container>
   );
 }

@@ -21,7 +21,7 @@ export default function Battle({ state }) {
 
   const [shadowColor1, setShadowColor1] = useState("#786ff5");
   const [textCard1, setTextCard1] = useState(
-    `ID: ${socketId.substr(0, 8)}... <br /> Escolha sua carta`
+    `ID: ${socketId.substr(0, 8)}... <br /> `
   );
 
   const [shadowColor2, setShadowColor2] = useState("#786ff5");
@@ -106,7 +106,7 @@ export default function Battle({ state }) {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              backgroundColor: "#7e7e81",
+              backgroundColor: "#A8795B",
               borderRadius: "15%",
               boxShadow: `3px 5px 2px ${shadowColor1}`,
             }}
@@ -127,7 +127,7 @@ export default function Battle({ state }) {
             component="h1"
             variant="h3"
             align="center"
-            color="primary"
+            color="white"
             sx={{ fontWeight: "bold", alignSelf: "center" }}
           >
             VS

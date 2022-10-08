@@ -15,7 +15,7 @@ export default function MainPost() {
 
   //?Render
   return (
-    <Container maxWidth="sx" sx={{ marginTop: "3%" }}>
+    <Container maxWidth="sx" sx={{ marginTop: 10 }}>
       <Grow in={true} {...(true ? { timeout: 1000 } : {})}>
         <Paper
           sx={{
@@ -24,8 +24,9 @@ export default function MainPost() {
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
-            backgroundImage:
-              "url(https://img.freepik.com/free-vector/holographic-abstract-background_598544-119.jpg?w=2000)",
+            //backgroundImage:
+            //  "url(https://img.freepik.com/free-vector/holographic-abstract-background_598544-119.jpg?w=2000)",
+            backgroundColor: "#A8795B",
             display: "flex",
             flexDirection: "row",
             flexWrap: "nowrap",
@@ -52,7 +53,7 @@ export default function MainPost() {
           <div id="item_button" style={{ paddingRight: "20%" }}>
             <Button
               onClick={handleBattle}
-              variant="outlined"
+              variant="contained"
               sx={{
                 boxShadow: " 10px 5px 5px",
                 width: "200%",
