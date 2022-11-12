@@ -66,6 +66,7 @@ export default function Game() {
             winner,
             socketId: state.socketId,
             status,
+            room: state.room,
           },
         });
       }
@@ -115,7 +116,16 @@ export default function Game() {
 
         {/* Error component */}
         {roomError && (
-          <Container maxWidth="md" sx={{ marginBottom: "5%" }}>
+          <Container
+            maxWidth="md"
+            sx={{
+              marginBottom: "5%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <Alert variant="outlined" severity="info">
               {roomError}
             </Alert>

@@ -106,11 +106,12 @@ export default function Home() {
                 label="Entrar em uma sala"
                 variant="outlined"
                 placeholder="Digite o id da sala..."
+                color="secondary"
                 onChange={(e) => {
                   setRoomId(e.target.value);
                 }}
               />
-              <Button variant="outlined" onClick={handleJoin}>
+              <Button variant="outlined" color="secondary" onClick={handleJoin}>
                 Entrar
               </Button>
             </Stack>
@@ -140,7 +141,7 @@ export default function Home() {
                 })
               : null}
 
-            {/* Show aveliable rooms - not in use */}
+            {/* Show avaliable rooms - not in use */}
 
             {/* {rooms.length > 0 ? (
               rooms.map((room, index) => {

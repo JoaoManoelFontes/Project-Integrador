@@ -26,7 +26,7 @@ export default function MainPost() {
             backgroundPosition: "center",
             //backgroundImage:
             //  "url(https://img.freepik.com/free-vector/holographic-abstract-background_598544-119.jpg?w=2000)",
-            backgroundColor: "#A8795B",
+            backgroundImage: "linear-gradient(#683401, #854306, #dc9426);",
             display: "flex",
             flexDirection: "row",
             flexWrap: "nowrap",
@@ -40,13 +40,13 @@ export default function MainPost() {
             <Typography
               component="h1"
               variant="h3"
-              color="inherit"
+              color="white"
               gutterBottom
               align="left"
             >
-              Bem-vindo ao CardGame
+              Bem-vindo ao Encounter
             </Typography>
-            <Typography variant="h5" color="inherit" align="left" paragraph>
+            <Typography variant="h5" color="white" align="left" paragraph>
               O melhor jogo de cartas NFT!
             </Typography>
           </div>
@@ -55,7 +55,7 @@ export default function MainPost() {
               onClick={handleBattle}
               variant="contained"
               sx={{
-                boxShadow: " 10px 5px 5px",
+                boxShadow: " 10px 5px 4px #252424ce",
                 width: "200%",
                 padding: "20%",
               }}

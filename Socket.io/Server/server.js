@@ -28,12 +28,9 @@ io.on("connection", (socket) => {
           socket.room = room;
           socket.emit("roomJoined", {
             room: room,
-            status: "player 2 joined, waiting to start the game",
+            status: "player 2 entrou, esperando para começar",
           });
-          io.to(room).emit(
-            "status",
-            "player 2 joined, waiting to start the game"
-          );
+          io.to(room).emit("status", "player 2 entrou, esperando para começar");
           io.to(room).emit("playerId", socket.id);
           io.to(room).emit(
             "cardStatus",
@@ -56,7 +53,7 @@ io.on("connection", (socket) => {
     clients[socket.room] = 1;
     socket.emit("roomGenerated", {
       room: socket.room,
-      status: "waiting for player 2",
+      status: "esperando um segundo player",
     });
     rooms.push(socket.room);
   });
@@ -69,9 +66,9 @@ io.on("connection", (socket) => {
       socket.join(room);
       socket.emit("roomJoined", {
         room: room,
-        status: "player 2 joined, waiting to start the game",
+        status: "player 2 entrou, esperando para começar",
       });
-      io.to(room).emit("status", "player 2 joined, waiting to start the game");
+      io.to(room).emit("status", "player 2 entrou, esperando para começar");
       io.to(room).emit("playerId", socket.id);
       io.to(room).emit(
         "cardStatus",
@@ -80,7 +77,7 @@ io.on("connection", (socket) => {
     } else {
       socket.emit(
         "joinRoomError",
-        "This room has already full or does not exists! Generate a room to continue"
+        "Essa sala já está cheia ou não existe! Crie uma sala para batalhar"
       );
     }
   });
@@ -89,13 +86,16 @@ io.on("connection", (socket) => {
   socket.on("sendCard", ({ playerCard, room, id }) => {
     if (players[room] == undefined) {
       players[room] = { player1: { playerCard, id }, player2: undefined };
-      io.to(room).emit("status", socket.id + " has already choices his card");
+      io.to(room).emit("status", socket.id + " já escolheu sua carta");
       io.to(room).emit("senderId", socket.id);
     } else if (players[room].player1.id == socket.id) {
       socket.emit("status", "You only can pick a card 1 time ");
     } else if (players[room].player2 == undefined) {
       players[room].player2 = { playerCard, id };
-      io.to(room).emit("status", "Players has already choices his card");
+      io.to(room).emit(
+        "status",
+        "Os jogadores já escolheram suas cartas! Aguarde o resultado..."
+      );
       io.to(room).emit("senderId", socket.id);
       (async () => {
         const result = await winner(players[room]);

@@ -19,12 +19,12 @@ export default function Battle({ state }) {
   //?States
   const [status, setStatus] = useState(prevStatus);
 
-  const [shadowColor1, setShadowColor1] = useState("#786ff5");
+  const [shadowColor1, setShadowColor1] = useState("#b3c4cf");
   const [textCard1, setTextCard1] = useState(
     `ID: ${socketId.substr(0, 8)}... <br /> `
   );
 
-  const [shadowColor2, setShadowColor2] = useState("#786ff5");
+  const [shadowColor2, setShadowColor2] = useState("#b3c4cf");
   const [textCard2, setTextCard2] = useState("");
 
   //? Effects
@@ -48,11 +48,11 @@ export default function Battle({ state }) {
 
       if (data == socketId) {
         // se foi o próprio jogador que escolheu
-        setShadowColor1("#5cf0b7");
+        setShadowColor1("#f09963");
         setTextCard1(`ID: ${data.substr(0, 8)}... <br /> Carta escolhida!`);
       } else {
         // Se foi o adversário que escolheu
-        setShadowColor2("#5cf0b7");
+        setShadowColor2("#f09963");
         setTextCard2(`ID: ${data.substr(0, 8)}... <br /> Carta escolhida!`);
       }
     });
@@ -64,19 +64,19 @@ export default function Battle({ state }) {
 
   //?Render
   return (
-    <Container maxWidth="md" sx={{ marginTop: "5%" }}>
+    <Container maxWidth="md" sx={{ marginTop: "8%" }}>
       {/* Battle component header */}
       <Box sx={{ marginBottom: "5%" }}>
         <Typography
           component="h1"
           variant="h4"
           align="center"
-          color="primary"
+          color="secondary"
           sx={{ fontWeight: "bold" }}
         >
           SALA
         </Typography>
-        <Typography variant="body2" align="center" color="dark" gutterBottom>
+        <Typography variant="body2" align="center" color="primary" gutterBottom>
           ID = {room}
         </Typography>
       </Box>
@@ -86,9 +86,9 @@ export default function Battle({ state }) {
           borderRadius: 2,
           boxShadow: " 0 0 0.5em",
           marginBottom: "5%",
-          backgroundImage: "linear-gradient(#26294e81, #2e2c2c);",
+          backgroundImage: "linear-gradient(#1d0b0081, #2e2c2c);",
         }}
-        bgcolor="#2e2d2d"
+        bgcolor="#311503"
       >
         <Box
           sx={{
@@ -106,7 +106,7 @@ export default function Battle({ state }) {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              backgroundColor: "#A8795B",
+              backgroundColor: "#7e7e81",
               borderRadius: "15%",
               boxShadow: `3px 5px 2px ${shadowColor1}`,
             }}
@@ -127,7 +127,7 @@ export default function Battle({ state }) {
             component="h1"
             variant="h3"
             align="center"
-            color="white"
+            color="secondary"
             sx={{ fontWeight: "bold", alignSelf: "center" }}
           >
             VS
@@ -164,7 +164,7 @@ export default function Battle({ state }) {
           <Typography
             variant="h5"
             align="center"
-            color="white"
+            color="secondary"
             sx={{
               margin: "5%",
               padding: "5%",

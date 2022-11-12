@@ -1,29 +1,11 @@
-// ? react hooks imports
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 // ? material imports
-import {
-  Button,
-  Typography,
-  Stack,
-  Container,
-  TextField,
-  Alert,
-  Box,
-} from "@mui/material";
-
-// ? socket client import
-import socket from "../services/client";
+import { Typography, Container, Box } from "@mui/material";
 
 //? Components render imports
 import Header from "../components/commons/Header";
 import Footer from "../components/commons/Footer";
-import MainPost from "../components/MainPost";
 
 export default function About() {
-  const navigate = useNavigate();
-
   // ?Render
   return (
     <>

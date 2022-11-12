@@ -29,7 +29,7 @@ export default function Footer() {
       component="footer"
     >
       <Typography variant="h6" align="center" gutterBottom>
-        CardGame
+        Encounter
       </Typography>
       <Typography
         variant="subtitle1"

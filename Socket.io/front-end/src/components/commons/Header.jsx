@@ -1,7 +1,7 @@
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { AppBar } from "@mui/material";
-import Link from '@mui/material/Link';
+import Link from "@mui/material/Link";
 
 export default function Header() {
   return (
@@ -15,8 +15,8 @@ export default function Header() {
           noWrap
           sx={{ flex: 1 }}
         >
-          <Link href="/" underline="none" style={{ color: "#FFF"}}>
-            CardGame
+          <Link href="/" underline="none" style={{ color: "#FFF" }}>
+            Encounter
           </Link>
         </Typography>
         <Toolbar
@@ -30,7 +30,9 @@ export default function Header() {
             sx={{ p: 1, flexShrink: 0 }}
             noWrap
           >
-            <Link href="/about" underline="none" style={{ color: "#FFF"}}>Sobre</Link>
+            <Link href="/about" underline="none" style={{ color: "#FFF" }}>
+              Sobre
+            </Link>
           </Typography>
           <Typography
             variant="h7"
