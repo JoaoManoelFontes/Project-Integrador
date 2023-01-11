@@ -75,7 +75,7 @@ export default function Game() {
               color="primary"
               gutterBottom
             >
-              SALA = {state.room}
+              SALA: {state.room}
             </Typography>
           </Box>
           <Box
