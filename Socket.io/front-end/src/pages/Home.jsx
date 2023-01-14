@@ -20,6 +20,7 @@ import socket from "../services/client";
 import Header from "../components/commons/Header";
 import Footer from "../components/commons/Footer";
 import MainPost from "../components/MainPost";
+import Carrousel from "../components/carousel";
 
 export default function Home() {
   //?States & Hooks
@@ -163,6 +164,10 @@ export default function Home() {
               <></>
             )} */}
           </Container>
+          <br />
+          {/* Show cards component */}
+          <Carrousel />
+          <br />
         </Box>
       </main>
       <Footer />
