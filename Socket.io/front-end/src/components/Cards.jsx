@@ -28,7 +28,7 @@ export default function Cards(props) {
   //? handle functions
 
   const handleChange = (e) => {
-    // ? Manda a caritnha que o player escolheu em forma de json pro state
+    // ? Manda a cartinha que o player escolheu em forma de json pro state
     setPlayerCard(JSON.parse(e.target.value));
   };
 
