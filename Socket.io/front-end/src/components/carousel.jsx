@@ -40,8 +40,16 @@ export default function Carrousel() {
         backgroundImage: "linear-gradient(#FFFFFF , #eacda3, #F4E2D8, #ffff);",
       }}
     >
-      <Typography component="h2" variant="h4" align="center" color="secondary">
-        Nossas Cartinhas
+      <Typography
+        component="h2"
+        variant="h4"
+        align="center"
+        color="primary"
+        sx={{
+          fontWeight: "bold",
+        }}
+      >
+        Nossos Personagens
       </Typography>
       <Container
         maxWidth="lg"
