@@ -171,7 +171,7 @@ export default function Game() {
               </Typography>
             </Box>
           </Box>
-
+          <hr />
           {/* Result button */}
           <Box
             sx={{
